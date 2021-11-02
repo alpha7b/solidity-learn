@@ -154,3 +154,43 @@ contract HelloWorld {
 }
 
 先在remix里将合约部署到eth测试网，然后到vscode的test8里修改代码，最终在react app里实现转账到合约里。
+
+
+================ test7 - 用web3监听智能合约种的事件 ================
+智能合约交互(八)事件  https://www.bilibili.com/video/BV1hQ4y1X7FV
+演示用web3来监听智能合约中的事件
+
+1. Remix部署以下合约， set一个值，然后在链上看到交易hash多了个logs标签页，里面即为event，包含有set值
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+contract HelloWorld {
+    
+    // 此合约ciheyue此合约此合约shi此合约此合约是weile
+    string private text;
+    
+    event SetEvent(string message);
+    
+    function get() external view returns(string memory) {
+        return text;
+    }
+    
+    function set(string memory _text) payable external {
+        text = _text;
+        emit SetEvent(_text);
+    }
+    
+    receive() external payable {
+        text = "fallback";
+    }
+}
+
+
+2. test8初始和test7一样
+增加两种触发event的方式
+第一种: getPastEvents
+  const res = await contract.getPastEvents('SetEvent', {fromBlock: 9573886})
+  console.log(res);
+
+第二种: 监听event，非常强大，比如可以监听别人给我转账，然后发邮件通知我，或者记录到数据库里
+  contract.events.SetEvent({fromBlock: 'latest'}).on('data', (event) =>{
+    console.log(event)})
