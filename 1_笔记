@@ -1,0 +1,156 @@
+以太坊API主要提供两种智能合约交互方式：
+1. 读数据 eth_call
+2. 写数据 eth_sendTransaction
+
+智能合约交互（二）安装  https://www.bilibili.com/video/BV1JQ4y1C7Na
+================ test1 - 使用npm安装web3 ================
+
+1. 下载安装nodejs
+2. # 初始化npm，创建package.json
+npm init -y
+3. # 安装web3
+npm install web3
+# 此处可能要安装python3和Visual Studio Build Tools
+# https://github.com/nodejs/node-gyp#on-windows
+# 直接点击以下链接下载安装Visual C++ Build Environment
+# https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools
+
+4. # 创建app.js
+touch app.js
+# 在app.js里写入以下代码，引用web3并打印
+const Web3 = require('web3')
+console.log(Web3)
+
+5. # 执行app.js，能看到打印结果
+node app.js
+
+================ test1/test1-2 - 在浏览器里使用web3 ================
+https://reactjs.org/docs/create-a-new-react-app.html
+1. #创建react app (uniswap也用的react) 
+npx create-react-app my-app
+
+2. #安装web3
+cd my-app
+yarn add web3
+
+3. # 在src/app.js里写入以下代码，引用web3并打印
+import Web3 from 'web3';
+console.log(Web3);
+
+4. # 启动app
+yarn start
+
+5. 在浏览器里查看打印的web3
+在浏览器里打开http://localhost:300
+F12 -> Console 即能看到web3
+
+
+智能合约交互(三）连接ganache  https://www.bilibili.com/video/BV1Kg411F79G
+================ test2 - 本地npm连接ganache或者rpc ================
+cd test3
+npm init -y
+npm install web3
+添加app.js及代码
+node app.js
+
+================ test3 - 使用react连接rpc ================
+cd test4
+npx create-react-app my-app
+yarn add web3
+往src/App.js添加代码
+yarn start
+
+
+
+================ test4 - 使用react连接rpc查看链上数据 ================
+智能合约交互（四）创建合约实例 https://www.bilibili.com/video/BV1C64y1871o
+web3 instanace creates contract instnace
+contract instance interacts with smart contract
+
+创建合约实例需要两个参数：
+1. 合约地址
+2. 合约ABI
+此处参考USDT的地址和ABI https://cn.etherscan.com/address/0xdac17f958d2ee523a2206206994597c13d831ec7
+
+
+================ test5 - 用remix部署合约，并且用react连接rpc查看链上数据 ================
+智能合约交互(五)读取数据 https://www.bilibili.com/video/BV1NL411s7zP
+主要是使用call
+
+使用remix部署一个读写函数的合约
+1. 把小狐狸连接eth测试网Rinkeby，并且申请一些测试币
+2. 打开https://remix.ethereum.org/， 在Deploy插件里把ENVIRONMENT设置为Inject Web3. 这个表示连接了小狐狸的当前网络。
+3. 在Remix里新建一个合约文件，点Deploy部署一下合约到eth测试网
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+contract HelloWorld {
+    
+    // 此合约ciheyue此合约此合约shi此合约此合约是weile
+    string private text;
+    
+    function get() external view returns(string memory) {
+        return text;
+    }
+    
+    function set(string memory _text) external {
+        text = _text;
+    }
+}
+
+4. 打开左下角的Deployed Contracts，能看到这个合约里的函数使用按钮。在set框输入 "今天星期几"，点set，区块数据更新后，点get，就能读取到"今天星期几"
+
+使用react读取刚才部署的合约里的数据
+1. 找到合约的地址
+Remix -> Deploy -> Deployed Contracts，即能在下拉框里看到合约地址，地址旁边就是复制按钮
+2. 找到合约的ABI
+Remix -> Solidity Compliler插件 -> CONTRACT 下面有ABI复制按钮
+
+将以上的合约信息复制到test5\my-app\src\App.js里，启动react即能在浏览器的F12里看到“今天星期几”
+
+
+
+================ test6 - 用remix部署合约，并且用react连接rpc查看链上数据 ================
+智能合约交互(六)写数据 https://www.bilibili.com/video/BV1m34y1U7nF
+主要是使用sendTransaction，智能合约还用前面部署的那个text合约
+用react写一个输入框，再写一个按钮，然后把用户输入的内容设置到区块链的合约上
+
+
+================ test7 - 发送ether的两种方式 ================
+智能合约交互(七)发送ether的两种方式  https://www.bilibili.com/video/BV1MU4y1w7PA
+
+remix里的合约有改变
+合约接收ether有两种方式
+1. 给函数里增加payable，这样在发送transaction时可以把ether也发到合约里
+    function set(string memory _text) payable external {
+        text = _text;
+    }
+
+
+2. 另一种方式是fallback，直接往合约里打ether，也就是直接往合约地址转ether。这个方法也可以用于给普通地址转账
+    receive() external payable {
+        text = "fallback";
+    }
+
+Remix里的合约如下，包含两种接收ether的方式
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8;
+contract HelloWorld {
+    
+    // 此合约ciheyue此合约此合约shi此合约此合约是weile
+    string private text;
+    
+    function get() external view returns(string memory) {
+        return text;
+    }
+    
+    function set(string memory _text) payable external {
+        text = _text;
+    }
+    
+    receive() external payable {
+        text = "fallback";
+    }
+}
+
+先在remix里将合约部署到eth测试网，然后到vscode的test8里修改代码，最终在react app里实现转账到合约里。
