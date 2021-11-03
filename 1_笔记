@@ -156,7 +156,7 @@ contract HelloWorld {
 先在remix里将合约部署到eth测试网，然后到vscode的test8里修改代码，最终在react app里实现转账到合约里。
 
 
-================ test7 - 用web3监听智能合约种的事件 ================
+================ test8 - 用web3监听智能合约种的事件 ================
 智能合约交互(八)事件  https://www.bilibili.com/video/BV1hQ4y1X7FV
 演示用web3来监听智能合约中的事件
 
@@ -194,3 +194,48 @@ contract HelloWorld {
 第二种: 监听event，非常强大，比如可以监听别人给我转账，然后发邮件通知我，或者记录到数据库里
   contract.events.SetEvent({fromBlock: 'latest'}).on('data', (event) =>{
     console.log(event)})
+
+
+
+================ test9 - 用web3监听智能合约种的事件 ================
+智能合约交互(九)实用函数(fromWei, toWei, hexToAscii, ...) https://www.bilibili.com/video/BV1xf4y177cr
+
+演示web3中的一些实用小函数
+比如1ether=10的18次幂个wei，即10个零，写起来很麻烦。toWei函数可以将ether转换成wei
+web3.untils.toWei('1') //将1个ether转换成wei
+
+  const v = web3.utils.toWei('1'); //将1个ether转换成wei
+  console.log(v);
+
+  web3.utils.fromWei('1000000000000000000'); //10**18个wei转换成ether
+  web3.utils.toBN('1000'); //将数字1000转换成big number类型
+  web3.utils.BN('1000'); //将数字1000转换成big number类型
+  web3.utils.isBN(); //判断一个数是否是big number类型
+  web3.utils.hexToAscii('0xff'); //将16进制转换成字符串
+  web3.utils.asciiToHex('abcd'); //将成字符串转换成16进制数
+  web3.utils.isHex(); //判断是否是16进制
+  web3.utils.toHex(); //转换成16进制
+
+  web3.utils.padLeft('0xff', 20); //拼接transaction
+  web3.utils.isAddress(); //验证是否是合法地址，比如用户打钱填入的地址需要验证是否合法
+  web3.utils.sha3('v'); //把一个东西变成hash
+  web3.utils.soliditySha3({type: 'uint8'}); //
+
+  全部函数请参考：
+  英 https://web3js.readthedocs.io/en/v1.2.11/web3-utils.html
+  中 http://cw.hubwiz.com/card/c/web3.js-1.0/1/8/1/
+
+
+================ test10 - truffle简单介绍 ================
+truffle简单介绍 https://www.bilibili.com/video/BV1rq4y1V7VM
+
+truffle是编写智能合约最流行的框架，支持eth和其他evm链，可以在本地进行合约的编译，部署和测试。
+
+truffle是一个nodejs的包，直接用npm命令就可以安装
+npm install -g truffle
+
+
+
+
+
+
