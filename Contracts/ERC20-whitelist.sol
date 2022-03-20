@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract FSN is ERC20{
+contract ERC20WL is ERC20{
     mapping(address => bool) private whitelist;
     address immutable caller;
 
